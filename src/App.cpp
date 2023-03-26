@@ -40,7 +40,8 @@ int App::exec() {
         }
     }
 
-    std::cout << "TOP TEN\n";
+    std::cout << "\nTOP TEN\n\n";
+    Internal::Packet::printHeader();
 
     for (auto &packet: topTen) {
         std::cout << packet;

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 namespace Internal {
 
@@ -16,9 +17,40 @@ namespace Internal {
         int numVotes = 0;
 
         static void printHeader() {
-            std::cout << "Id\t Titletype\t ";
-            std::cout.width(50);
-            std::cout << "Title\t IsAdult\t NumVotes\t Rating\t RunTime" << std::endl;
+
+            std::cout.setf(std::ios::left, std::ios::adjustfield);
+
+            auto printCol = [](auto obj){ std::cout << std::setw(12) << obj; };
+            auto printTitle = [](auto obj){ std::cout << std::setw(60) << obj; };
+
+            printCol("Id");
+            printCol("Titletype");
+            printTitle("Title");
+            printCol("IsAdult");
+            printCol("NumVotes");
+            printCol("Rating");
+            printCol("RunTime");
+
+            std::cout << std::endl;
+        }
+
+        friend std::ostream &operator<<(std::ostream &out, const Packet &packet) {
+
+            out.setf(std::ios::left, std::ios::adjustfield);
+
+            auto printCol = [&](auto obj){ out << std::setw(12) << obj; };
+            auto printTitle = [&](auto obj){ out << std::setw(60) << obj; };
+
+            printCol(packet.id);
+            printCol(packet.titleType);
+            printTitle(packet.title);
+            printCol(packet.isAdult);
+            printCol(packet.numVotes);
+            printCol(packet.rating);
+            printCol(packet.runTime);
+
+            out << std::endl;
+            return out;
         }
 
         friend bool operator<(const Packet &a, const Packet &b) {
@@ -41,13 +73,6 @@ namespace Internal {
             return a.rating == b.rating;
         }
 
-        friend std::ostream &operator<<(std::ostream &out, const Packet &packet) {
-            out << packet.id << " \t" << packet.titleType << " \t";
-            out.width(50);
-            out << packet.title << " \t" << packet.isAdult << " \t";
-            out << packet.numVotes << " \t" << packet.rating << " \t" << packet.runTime << std::endl;
-            return out;
-        }
     };
 
 }// namespace Internal
