@@ -9,7 +9,8 @@ void AkasFile::init(const std::string& fileName) {
 
 void AkasFile::load(PackDict& tvSeries) {
 
-  std::cout << "Akas load has been started\n";
+  std::printf("Akas load has been started\n");
+
   while(!eof()) {
     auto words = select();
 

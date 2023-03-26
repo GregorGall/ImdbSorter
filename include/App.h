@@ -2,6 +2,7 @@
 #include <iostream>
 #include <set>
 #include <string>
+#include <thread>
 
 #include "BaseFile.h"
 #include "RatingFile.h"

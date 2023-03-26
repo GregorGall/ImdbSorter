@@ -22,13 +22,18 @@ App::App(int argc, char **argv) {
 int App::exec() {
 
   baseFile.load(tvSeries, tvEpisodes);
-  ratingFile.load(tvSeries);
-  akasFile.load(tvSeries);
-  episodeFile.load(tvSeries, tvEpisodes);
+
+  std::thread thr1(&RatingFile::load, std::ref(ratingFile), std::ref(tvSeries));
+  std::thread thr2(&AkasFile::load, std::ref(akasFile), std::ref(tvSeries));
+  std::thread thr3(&EpisodeFile::load, std::ref(episodeFile), std::ref(tvSeries), std::ref(tvEpisodes));
+
+  thr3.join();
+  thr2.join();
+  thr1.join();
 
   std::cout << "\nLoad has been finished\n";
 
-  std::set<Packet> topTen;
+  std::multiset<Packet> topTen;
   for(auto& packet: tvSeries) {
     if(packet.second.runTime < maxRunTime){
       topTen.insert(packet.second);

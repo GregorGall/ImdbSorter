@@ -9,8 +9,7 @@ void RatingFile::init(const std::string& fileName) {
 
 void RatingFile::load(PackDict& tvSeries) {
 
-  std::cout << "Rate load has been started\n";
-  PackDict reduced;
+  std::printf("Rate load has been started\n");
 
   while(!eof()) {
     auto words = select();
@@ -22,9 +21,7 @@ void RatingFile::load(PackDict& tvSeries) {
       packet.rating = std::stof(words["averageRating"]);
       packet.numVotes = std::stoi(words["numVotes"]);
 
-      reduced[words["tconst"]] = packet;
     }
   }
 
-  tvSeries = reduced;
 }

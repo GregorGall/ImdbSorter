@@ -25,8 +25,20 @@ namespace Internal {
       return a.rating < b.rating;
     }
 
+    friend bool operator<=(const Packet& a, const Packet& b) {
+      return a.rating <= b.rating;
+    }
+
     friend bool operator>(const Packet& a, const Packet& b) {
       return a.rating > b.rating;
+    }
+
+    friend bool operator>=(const Packet& a, const Packet& b) {
+      return a.rating >= b.rating;
+    }
+
+    friend bool operator==(const Packet& a, const Packet& b) {
+      return a.rating == b.rating;
     }
 
     friend std::ostream& operator<<(std::ostream& out, const Packet& packet){

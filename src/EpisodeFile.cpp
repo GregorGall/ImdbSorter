@@ -9,7 +9,8 @@ void EpisodeFile::init(const std::string& fileName) {
 
 void EpisodeFile::load(PackDict& tvSeries, PackDict& tvEpisodes) {
 
-  std::cout << "Episode load has been started\n";
+  std::printf("Episode load has been started\n");
+
   while(!eof()) {
     auto words = select();
 
