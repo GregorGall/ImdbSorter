@@ -4,15 +4,15 @@
 #include <string>
 #include <thread>
 
-#include "BaseFile.h"
-#include "RatingFile.h"
-#include "AkasFile.h"
-#include "EpisodeFile.h"
+#include "FileProcessors/AkasFile.h"
+#include "FileProcessors/BaseFile.h"
+#include "FileProcessors/EpisodeFile.h"
+#include "FileProcessors/RatingFile.h"
 
 class App {
 
-  using Packet = Internal::Packet;
-  using PackDict = Internal::PackDict;
+    using Packet = Internal::Packet;
+    using PackDict = Internal::PackDict;
 
 public:
     App(int argc, char **argv);
@@ -20,7 +20,6 @@ public:
     int exec();
 
 private:
-
     BaseFile baseFile;
     RatingFile ratingFile;
     AkasFile akasFile;

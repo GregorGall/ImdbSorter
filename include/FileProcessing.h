@@ -1,48 +1,45 @@
 #pragma once
 #include <fstream>
+#include <optional>
 #include <sstream>
 #include <string>
-#include <unordered_set>
 #include <unordered_map>
-#include <optional>
+#include <unordered_set>
 
-#include <assert.h>
 #include "Packet.h"
+#include <assert.h>
 
 namespace Internal {
 
-  using PackDict = std::unordered_map<std::string, Packet>;
+    using PackDict = std::unordered_map<std::string, Packet>;
+    using LineDict = std::unordered_map<std::string, std::string>;
 
 }
 
 class FileProcessing {
 
-  using LineDict = std::unordered_map<std::string, std::string>;
+    using LineDict = Internal::LineDict;
 
 public:
-
-    FileProcessing();
+    FileProcessing() = default;
 
     ~FileProcessing();
 
-    void init(const std::string& fileName, const std::unordered_set<std::string>& colSelects);
+    void init(const std::string &fileName, const std::unordered_set<std::string> &colSelects);
 
-    bool eof() { return  file.eof(); }
+    bool eof() { return file.eof(); }
 
 protected:
+    const std::string &nextLine();
 
-    const std::string& nextLine();
+    const LineDict &selectByFirstContains(const std::unordered_map<std::string, Internal::Packet> &checkStorage);
 
-    const LineDict& selectByFirstContains(const std::unordered_map<std::string, Internal::Packet>& checkStorage);
-
-    const LineDict& select();
-
-private:
-
-    void openFile(const std::string& fileName);
+    const LineDict &select();
 
 private:
+    void openFile(const std::string &fileName);
 
+private:
     int lastCol = 0;
 
     std::ifstream file;
@@ -52,5 +49,4 @@ private:
     std::string tmpLine;
 
     LineDict words;
-
 };
