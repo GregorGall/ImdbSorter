@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
+#include <optional>
 
 #include <assert.h>
 #include "Packet.h"
@@ -15,6 +16,8 @@ namespace Internal {
 }
 
 class FileProcessing {
+
+  using LineDict = std::unordered_map<std::string, std::string>;
 
 public:
 
@@ -28,12 +31,11 @@ public:
 
 protected:
 
-    std::string nextLine();
+    const std::string& nextLine();
 
-    std::unordered_map<std::string, std::string> select();
+    const LineDict& selectByFirstContains(const std::unordered_map<std::string, Internal::Packet>& checkStorage);
 
-    std::unordered_map<std::string, std::string> findById(const std::string& idName);
-
+    const LineDict& select();
 
 private:
 
@@ -46,5 +48,9 @@ private:
     std::ifstream file;
 
     std::unordered_map<int, std::string> colPos;
+
+    std::string tmpLine;
+
+    LineDict words;
 
 };

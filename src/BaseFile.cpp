@@ -21,7 +21,7 @@ void BaseFile::load(PackDict& tvSeries, PackDict& tvEpisodes) {
       packet.titleType = words["titleType"];
       packet.title = words["primaryTitle"];
       packet.isAdult = words["isAdult"];
-      packet.runTime = 0;
+      packet.runTime = (words["runtimeMinutes"] != "\\N" ? std::stoi(words["runtimeMinutes"]) : 0);
 
       tvSeries[packet.id] = packet;
     }

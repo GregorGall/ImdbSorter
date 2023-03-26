@@ -12,10 +12,10 @@ void AkasFile::load(PackDict& tvSeries) {
   std::printf("Akas load has been started\n");
 
   while(!eof()) {
-    auto words = select();
+    auto words = selectByFirstContains(tvSeries);
 
     // check and add
-    if( words.size() == 3 && tvSeries.contains(words["titleId"]) && words["region"] == "RU" ) {
+    if( words.size() == 3 && words["region"] == "RU" ) {
       tvSeries[words["titleId"]].title = words["title"];
     }
   }

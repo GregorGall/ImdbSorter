@@ -30,44 +30,46 @@ void FileProcessing::init(const std::string& fileName, const std::unordered_set<
 
 }
 
-std::string FileProcessing::nextLine() {
-    std::string line;
-    std::getline(file, line);
-    return line;
+const std::string& FileProcessing::nextLine() {
+    std::getline(file, tmpLine);
+    return tmpLine;
 }
 
-std::unordered_map<std::string, std::string> FileProcessing::findById(const std::string& idName)
-{
-  while(!file.eof()) {
-
-    std::string nLine = nextLine();
-
-    if(nLine.compare(0, idName.size(), idName) == 0) {
-      file.seekg(int(file.tellg()) - nLine.size());
-      return select();
-    };
-
-  }
-
-  return {};
-}
-
-std::unordered_map<std::string, std::string> FileProcessing::select() {
-
-  std::unordered_map<std::string, std::string> words;
+const FileProcessing::LineDict& FileProcessing::select() {
 
     std::stringstream sstr(nextLine());
     for(int i = 0 ; i <= lastCol; ++i) {
 
-      std::string column;
-      std::getline(sstr, column, '\t');
+      std::getline(sstr, tmpLine, '\t');
+      if(colPos.contains(i)) {
+        words[colPos[i]] = tmpLine;
+      }
 
-      if(colPos.contains(i) && column.size()) {
-        words[colPos[i]] = column;
+    }
+
+    return words;
+}
+
+const FileProcessing::LineDict& FileProcessing::selectByFirstContains(const std::unordered_map<std::string, Internal::Packet>& checkStorage) {
+
+  std::stringstream sstr(nextLine());
+  std::getline(sstr, tmpLine, '\t');
+
+  if(checkStorage.contains(tmpLine)) {
+
+    sstr.seekg(0);
+    for(int i = 0 ; i <= lastCol; ++i) {
+      std::getline(sstr, tmpLine, '\t');
+      if(colPos.contains(i)) {
+        words[colPos[i]] = tmpLine;
       }
     }
 
     return words;
+  };
+
+  words.clear();
+  return words;
 }
 
 
