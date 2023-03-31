@@ -20,28 +20,32 @@ App::App(int argc, char **argv) {
 
 int App::exec() {
 
+    std::cout << "Load has been started\n";
+
     baseFile.load(tvSeries, tvEpisodes);
 
-    std::thread thr1(&RatingFile::load, std::ref(ratingFile), std::ref(tvSeries));
-    std::thread thr2(&AkasFile::load, std::ref(akasFile), std::ref(tvSeries));
-    std::thread thr3(&EpisodeFile::load, std::ref(episodeFile), std::ref(tvSeries), std::ref(tvEpisodes));
+    std::thread rateThread(&RatingFile::load, std::ref(ratingFile), std::ref(tvSeries));
+    std::thread akasThread(&AkasFile::load, std::ref(akasFile), std::ref(tvSeries));
+    std::thread episodeThread(&EpisodeFile::load, std::ref(episodeFile), std::ref(tvSeries), std::ref(tvEpisodes));
 
-    thr3.join();
-    thr2.join();
-    thr1.join();
+    episodeThread.join();
+    akasThread.join();
+    rateThread.join();
 
-    std::cout << "\nLoad has been finished\n";
+    std::cout << "Load has been finished\n";
 
-    std::multiset<Packet> topTen;
+    std::multiset<packet_t> topTen;
     for (auto &packet: tvSeries) {
         if (packet.second.runTime < maxRunTime) {
             topTen.insert(packet.second);
-            if (topTen.size() > 10) { topTen.erase(topTen.begin()); }
+            if (topTen.size() > topNum) {
+              topTen.erase(topTen.begin());
+            }
         }
     }
 
     std::cout << "\nTOP TEN\n\n";
-    Internal::Packet::printHeader();
+    Internal::packet_t::printHeader();
 
     for (auto &packet: topTen) {
         std::cout << packet;

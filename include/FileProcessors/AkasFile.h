@@ -3,7 +3,7 @@
 
 class AkasFile : public FileProcessing {
 
-    using Packet = Internal::Packet;
+    using packet_t = Internal::packet_t;
     using PackDict = Internal::PackDict;
 
 public:
@@ -12,4 +12,13 @@ public:
     void init(const std::string &fileName);
 
     void load(PackDict &tvSeries);
+
+private:
+
+    const std::string id{"titleId"};
+    const std::string title{"title"};
+    const std::string language{"region"};
+
+    const std::string targetLang{"RU"};
+
 };

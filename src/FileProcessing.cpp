@@ -27,8 +27,16 @@ void FileProcessing::init(const std::string &fileName, const std::unordered_set<
     assert(colPos.size() == colSelects.size() && "Header load error");
 }
 
+bool FileProcessing::eof() {
+  return file.eof();
+}
+
+int FileProcessing::colNum() {
+  return colPos.size();
+}
+
 const std::string &FileProcessing::nextLine() {
-    std::getline(file, tmpLine);
+  std::getline(file, tmpLine);
     return tmpLine;
 }
 
@@ -46,7 +54,7 @@ const FileProcessing::LineDict &FileProcessing::select() {
     return words;
 }
 
-const FileProcessing::LineDict &FileProcessing::selectByFirstContains(const std::unordered_map<std::string, Internal::Packet> &checkStorage) {
+const FileProcessing::LineDict &FileProcessing::selectByFirstContains(const std::unordered_map<std::string, Internal::packet_t> &checkStorage) {
 
     std::stringstream sstr(nextLine());
     std::getline(sstr, tmpLine, '\t');

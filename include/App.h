@@ -11,7 +11,7 @@
 
 class App {
 
-    using Packet = Internal::Packet;
+    using packet_t = Internal::packet_t;
     using PackDict = Internal::PackDict;
 
 public:
@@ -26,6 +26,7 @@ private:
     EpisodeFile episodeFile;
 
     int maxRunTime = 0;
+    const int topNum = 10;
 
     PackDict tvSeries;
     PackDict tvEpisodes;

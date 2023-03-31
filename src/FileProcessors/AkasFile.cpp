@@ -1,19 +1,17 @@
 #include "FileProcessors/AkasFile.h"
 
 void AkasFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {"titleId", "title", "region"});
+    FileProcessing::init(fileName, {id, title, language});
 }
 
 void AkasFile::load(PackDict &tvSeries) {
-
-    std::printf("Akas load has been started\n");
 
     while (!eof()) {
         auto &words = selectByFirstContains(tvSeries);
 
         // check and add
-        if (words.size() == 3 && words.at("region") == "RU") {
-            tvSeries[words.at("titleId")].title = words.at("title");
+        if (words.size() == colNum() && words.at(language) == targetLang) {
+            tvSeries[words.at(id)].title = words.at(title);
         }
     }
 }

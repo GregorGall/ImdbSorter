@@ -1,35 +1,33 @@
 #include "FileProcessors/BaseFile.h"
 
 void BaseFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {"tconst", "titleType", "primaryTitle", "isAdult", "runtimeMinutes"});
+    FileProcessing::init(fileName, {id, type, title, adultFlag, runTime});
 }
 
 void BaseFile::load(PackDict &tvSeries, PackDict &tvEpisodes) {
 
-    std::cout << "Base load has been started\n";
     while (!eof()) {
         auto &words = select();
 
-        bool valid = words.size() == 5 && words.at("isAdult") == "0";
-        bool tvSeriesString = valid && words.at("titleType") == "tvSeries";
-        bool tvEpisodesString = valid && words.at("titleType") == "tvEpisode";
+        bool valid = words.size() == colNum() && words.at(adultFlag) == adultFlagState;
+        bool tvSeriesString = valid && words.at(type) == seriesType;
+        bool tvEpisodesString = valid && words.at(type) == episodeType;
 
-        if (tvEpisodesString && words.at("runtimeMinutes") != "\\N") {
-            Packet packet;
-            packet.id = words.at("tconst");
-            packet.runTime = std::stoi(words.at("runtimeMinutes"));
+        if (tvEpisodesString && words.at(runTime) != undefined) {
+            packet_t packet;
+            packet.id = words.at(id);
+            packet.runTime = std::stoi(words.at(runTime));
 
             tvEpisodes[packet.id] = packet;
             continue;
         }
 
         if (tvSeriesString) {
-            Packet packet;
-            packet.id = words.at("tconst");
-            packet.titleType = words.at("titleType");
-            packet.title = words.at("primaryTitle");
-            packet.isAdult = words.at("isAdult");
-
+            packet_t packet {
+                words.at(id),
+                words.at(title),
+                words.at(type),
+                words.at(adultFlag) };
             tvSeries[packet.id] = packet;
         }
     }

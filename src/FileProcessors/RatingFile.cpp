@@ -1,22 +1,21 @@
 #include "FileProcessors/RatingFile.h"
 
 void RatingFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {"tconst", "averageRating", "numVotes"});
+    FileProcessing::init(fileName, {id, rating, voteNum});
 }
 
 void RatingFile::load(PackDict &tvSeries) {
 
-    std::printf("Rate load has been started\n");
-
     while (!eof()) {
         auto &words = select();
+        bool valid = words.size() == colNum() && tvSeries.contains(words.at(id));
 
         // check and add
-        if (words.size() == 3 && tvSeries.contains(words.at("tconst")) && std::stoi(words.at("numVotes")) > 1000) {
+        if (valid && std::stoi(words.at(voteNum)) > minVoteNum) {
 
-            Packet &packet = tvSeries[words.at("tconst")];
-            packet.rating = std::stof(words.at("averageRating"));
-            packet.numVotes = std::stoi(words.at("numVotes"));
+            Packet &packet = tvSeries[words.at(id)];
+            packet.rating = std::stof(words.at(rating));
+            packet.numVotes = std::stoi(words.at(voteNum));
         }
     }
 }

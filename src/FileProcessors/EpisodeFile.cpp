@@ -1,20 +1,19 @@
 #include "FileProcessors/EpisodeFile.h"
 
 void EpisodeFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {"tconst", "parentTconst"});
+    FileProcessing::init(fileName, {id, parentId});
 }
 
 void EpisodeFile::load(PackDict &tvSeries, PackDict &tvEpisodes) {
 
-    std::printf("Episode load has been started\n");
-
     while (!eof()) {
         auto &words = select();
+        bool valid = words.size() == colNum() && tvSeries.contains(words.at(parentId));
 
         // check and add
-        if (words.size() == 2 && tvSeries.contains(words.at("parentTconst")) && tvEpisodes.contains(words.at("tconst"))) {
-            Packet &packet = tvSeries[words.at("parentTconst")];
-            packet.runTime += tvEpisodes[words.at("tconst")].runTime;
+        if (valid && tvEpisodes.contains(words.at(id))) {
+            packet_t &packet = tvSeries[words.at(parentId)];
+            packet.runTime += tvEpisodes[words.at(id)].runTime;
         }
     }
 }

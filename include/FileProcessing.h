@@ -11,7 +11,7 @@
 
 namespace Internal {
 
-    using PackDict = std::unordered_map<std::string, Packet>;
+    using PackDict = std::unordered_map<std::string, packet_t>;
     using LineDict = std::unordered_map<std::string, std::string>;
 
 }
@@ -27,12 +27,14 @@ public:
 
     void init(const std::string &fileName, const std::unordered_set<std::string> &colSelects);
 
-    bool eof() { return file.eof(); }
+    bool eof();
+
+    int colNum();
 
 protected:
     const std::string &nextLine();
 
-    const LineDict &selectByFirstContains(const std::unordered_map<std::string, Internal::Packet> &checkStorage);
+    const LineDict &selectByFirstContains(const std::unordered_map<std::string, Internal::packet_t> &checkStorage);
 
     const LineDict &select();
 
