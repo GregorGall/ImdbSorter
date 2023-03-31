@@ -9,13 +9,23 @@
 #include "FileProcessors/EpisodeFile.h"
 #include "FileProcessors/RatingFile.h"
 
+struct input_t {
+
+  std::string baseFilePath = "None";
+  std::string ratingFilePath = "None";
+  std::string episodeFilePath = "None";
+  std::string akasFilePath = "None";
+  std::string runTimeEdge = "None";
+
+};
+
 class App {
 
     using packet_t = Internal::packet_t;
     using PackDict = Internal::PackDict;
 
 public:
-    App(int argc, char **argv);
+    App(const input_t& input);
 
     int exec();
 
@@ -25,7 +35,7 @@ private:
     AkasFile akasFile;
     EpisodeFile episodeFile;
 
-    int maxRunTime = 0;
+    int runTimeEdge = 0;
     const int topNum = 10;
 
     PackDict tvSeries;

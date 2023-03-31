@@ -1,21 +1,19 @@
 #include "App.h"
 
-App::App(int argc, char **argv) {
+App::App(const input_t& input) {
 
-    assert(argc == 6 && "Wrong arguments num, try again.\n");
+    baseFile.init(input.baseFilePath);
+    ratingFile.init(input.ratingFilePath);
+    episodeFile.init(input.episodeFilePath);
+    akasFile.init(input.akasFilePath);
 
-    baseFile.init(argv[1]);
-    ratingFile.init(argv[2]);
-    episodeFile.init(argv[3]);
-    akasFile.init(argv[4]);
-
-    try { maxRunTime = std::stoi(argv[5]); }
+    try { runTimeEdge = std::stoi(input.runTimeEdge); }
     catch(...) {
-        std::cout << "Invalid maximum runtime argument\n";
+        std::cout << "Invalid value for runTimeEdge\n";
         exit(-1);
     }
 
-    assert(maxRunTime > 0 && "Invalid maximum runtime argument");
+    assert(runTimeEdge > 0 && "Invalid maximum runtime argument");
 }
 
 int App::exec() {
@@ -36,7 +34,7 @@ int App::exec() {
 
     std::multiset<packet_t> topTen;
     for (auto &packet: tvSeries) {
-        if (packet.second.runTime < maxRunTime) {
+        if (packet.second.runTime < runTimeEdge) {
             topTen.insert(packet.second);
             if (topTen.size() > topNum) {
               topTen.erase(topTen.begin());
