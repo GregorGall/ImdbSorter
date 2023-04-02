@@ -1,7 +1,7 @@
 #include "FileProcessors/EpisodeFile.h"
 
-void EpisodeFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {id, parentId});
+void EpisodeFile::init(std::unique_ptr<std::ifstream> fileStream) {
+    FileProcessing::init(std::move(fileStream), {id, parentId});
 }
 
 void EpisodeFile::load(PackDict &tvSeries, PackDict &tvEpisodes) {

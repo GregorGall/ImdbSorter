@@ -1,7 +1,7 @@
 #include "FileProcessors/RatingFile.h"
 
-void RatingFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {id, rating, voteNum});
+void RatingFile::init(std::unique_ptr<std::ifstream> fileStream) {
+    FileProcessing::init(std::move(fileStream), {id, rating, voteNum});
 }
 
 void RatingFile::load(PackDict &tvSeries) {

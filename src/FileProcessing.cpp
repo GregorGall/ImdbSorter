@@ -1,13 +1,8 @@
 #include "FileProcessing.h"
 
-void FileProcessing::openFile(const std::string &fileName) {
-    file.open(fileName);
-    assert(file.is_open() && "File open error");
-}
+void FileProcessing::init(std::unique_ptr<std::ifstream> fileStream, const std::unordered_set<std::string> &colSelects) {
 
-void FileProcessing::init(const std::string &fileName, const std::unordered_set<std::string> &colSelects) {
-
-    openFile(fileName);
+    file = std::move(fileStream);
 
     int count = 0;
     std::stringstream sstr(nextLine());
@@ -24,11 +19,14 @@ void FileProcessing::init(const std::string &fileName, const std::unordered_set<
         ++count;
     }
 
-    assert(colPos.size() == colSelects.size() && "Header load error");
+    if(colPos.size() != colSelects.size()) {
+        std::cout << "Header load error\n";
+        exit(-1);
+    }
 }
 
 bool FileProcessing::eof() {
-  return file.eof();
+  return file->eof();
 }
 
 int FileProcessing::colNum() {
@@ -36,7 +34,7 @@ int FileProcessing::colNum() {
 }
 
 const std::string &FileProcessing::nextLine() {
-  std::getline(file, tmpLine);
+  std::getline(*file, tmpLine);
     return tmpLine;
 }
 
@@ -78,5 +76,5 @@ const FileProcessing::LineDict &FileProcessing::selectByFirstContains(const std:
 
 
 FileProcessing::~FileProcessing() {
-    file.close();
+    file->close();
 }

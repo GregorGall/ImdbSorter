@@ -3,6 +3,7 @@
 #include <optional>
 #include <sstream>
 #include <string>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -25,7 +26,7 @@ public:
 
     ~FileProcessing();
 
-    void init(const std::string &fileName, const std::unordered_set<std::string> &colSelects);
+    void init(std::unique_ptr<std::ifstream> fileStream, const std::unordered_set<std::string> &colSelects);
 
     bool eof();
 
@@ -39,12 +40,9 @@ protected:
     const LineDict &select();
 
 private:
-    void openFile(const std::string &fileName);
-
-private:
     int lastCol = 0;
 
-    std::ifstream file;
+    std::unique_ptr<std::ifstream> file;
 
     std::unordered_map<int, std::string> colPos;
 

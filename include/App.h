@@ -30,6 +30,9 @@ public:
     int exec();
 
 private:
+    std::unique_ptr<std::ifstream> openFile(const std::string &fileName);
+
+private:
     BaseFile baseFile;
     RatingFile ratingFile;
     AkasFile akasFile;

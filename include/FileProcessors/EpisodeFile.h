@@ -9,7 +9,7 @@ class EpisodeFile : public FileProcessing {
 public:
     EpisodeFile() = default;
 
-    void init(const std::string &fileName);
+    void init(std::unique_ptr<std::ifstream> fileStream);
 
     void load(PackDict &tvSeries, PackDict &tvEpisodes);
 

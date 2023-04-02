@@ -9,7 +9,7 @@ class RatingFile : public FileProcessing {
 public:
     RatingFile() = default;
 
-    void init(const std::string &fileName);
+    void init(std::unique_ptr<std::ifstream> fileStream);
 
     void load(PackDict &tvSeries);
 

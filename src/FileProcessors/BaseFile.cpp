@@ -1,7 +1,7 @@
 #include "FileProcessors/BaseFile.h"
 
-void BaseFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {id, type, title, adultFlag, runTime});
+void BaseFile::init(std::unique_ptr<std::ifstream> fileStream) {
+    FileProcessing::init(std::move(fileStream), {id, type, title, adultFlag, runTime});
 }
 
 void BaseFile::load(PackDict &tvSeries, PackDict &tvEpisodes) {

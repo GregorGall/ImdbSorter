@@ -1,7 +1,7 @@
 #include "FileProcessors/AkasFile.h"
 
-void AkasFile::init(const std::string &fileName) {
-    FileProcessing::init(fileName, {id, title, language});
+void AkasFile::init(std::unique_ptr<std::ifstream> fileStream) {
+    FileProcessing::init(std::move(fileStream), {id, title, language});
 }
 
 void AkasFile::load(PackDict &tvSeries) {

@@ -2,19 +2,35 @@
 
 App::App(const input_t& input) {
 
-    baseFile.init(input.baseFilePath);
-    ratingFile.init(input.ratingFilePath);
-    episodeFile.init(input.episodeFilePath);
-    akasFile.init(input.akasFilePath);
+    baseFile.init(openFile(input.baseFilePath));
+    ratingFile.init(openFile(input.ratingFilePath));
+    episodeFile.init(openFile(input.episodeFilePath));
+    akasFile.init(openFile(input.akasFilePath));
 
-    try { runTimeEdge = std::stoi(input.runTimeEdge); }
+    try {
+        runTimeEdge = std::stoi(input.runTimeEdge);
+        if(runTimeEdge <= 0) throw;
+    }
     catch(...) {
         std::cout << "Invalid value for runTimeEdge\n";
         exit(-1);
     }
 
-    assert(runTimeEdge > 0 && "Invalid maximum runtime argument");
 }
+
+std::unique_ptr<std::ifstream> App::openFile(const std::string &fileName) {
+    std::unique_ptr<std::ifstream> file;
+    try{ file  = std::make_unique<std::ifstream>(fileName); }
+    catch(std::exception& exceptMsg) {
+        std::cout << "File open error: " << fileName << std::endl;
+        std::cout << exceptMsg.what() << std::endl;
+        file->close();
+        exit(-1);
+    }
+
+    return file;
+}
+
 
 int App::exec() {
 
